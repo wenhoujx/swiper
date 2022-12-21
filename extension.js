@@ -111,11 +111,23 @@ function _firstOrNull(items) {
 	}
 }
 
+function swipeWordAtCursor() {
+	const editor = vscode.window.activeTextEditor
+	const currentSelection = vscode.window.activeTextEditor.selection
+	const word = editor.document.getText(editor.document.getWordRangeAtPosition(currentSelection.start))
+	state = {
+		lastValue: word,
+		lastSelected: null
+	}
+	swipe()
+}
+
 function swipe() {
 	const editor = vscode.window.activeTextEditor
 	const filename = _writeToTempFileIfNotSaved(editor.document)
 	const currentSelection = vscode.window.activeTextEditor.selection
 	const pick = vscode.window.createQuickPick()
+
 	pick.canSelectMany = false
 	pick.matchOnDescription = true
 	pick.value = state.lastValue
@@ -170,6 +182,10 @@ function _focusOnActiveItem(focused) {
 function activate(context) {
 	context.subscriptions.push(
 		vscode.commands.registerCommand('swiper.swiper-grep', () => swipe()));
+	context.subscriptions.push(
+		vscode.commands.registerCommand('swiper.swiper-grep-word-at-cursor', () =>
+			swipeWordAtCursor()
+		));
 }
 
 function deactivate() { }

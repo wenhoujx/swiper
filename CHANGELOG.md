@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.2.0] - 2020-12-22
+
+### Added
+
+- `swiper.swiper-grep-word-at-cursor` that auto greps the current word at cursor.
+
 ## [1.1.0] - 2020-12-21
 
 ### Changed

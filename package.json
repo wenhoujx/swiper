@@ -22,14 +22,20 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:swiper.swiper-grep"
+    "onCommand:swiper.swiper-grep", 
+    "onCommand:swiper.swiper.swiper-grep-word-at-cursor"
   ],
   "main": "./extension.js",
   "contributes": {
     "commands": [
       {
         "command": "swiper.swiper-grep",
-        "title": "Swiper Grep",
+        "title": "Swiper Grep/Resume",
+        "category": "Swiper"
+      }, 
+      {
+        "command": "swiper.swiper-grep-word-at-cursor",
+        "title": "Swiper Grep at Cursor",
         "category": "Swiper"
       }
     ]
