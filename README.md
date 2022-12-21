@@ -12,6 +12,12 @@ a dumb copycat of emacs swiper. Support search regex string in the current open 
 
 Install this extension.
 
+## Commands
+
+`swiper.swiper-grep-word-at-cursor` greps the current word at cursor.
+
+`swiper.swiper-grep` greps the last value tried.
+
 ## Quick tutorial
 
 Invoke command `Swiper: Swiper Grep` and start typing.
@@ -20,7 +26,7 @@ basic rules:
 
 1. Search use grep basic regex syntax.
 2. Search strings separated by space are AND-ed toegether. e.g. "a b" matched lines with "a" and "b" on the same line.
-3. Search string prefixed with `!` negates the search, "a !b" matches lines with "a" but not "b"
+3. Search string prefixed with `!` negates the search, "a !b" matches lines with "a" but not "b". Use `\!` if you want to match `"!"` literal string.
 4. Default case insensitive search.
 
 Some quick Example:
