@@ -4,6 +4,8 @@ copycat of emacs swiper
 
 > I only tested this on my macOS, Please file bug report or feature request.
 
+> This swiper does not match multiline (yet...)
+
 ## Installation
 
 install this extension,
@@ -36,3 +38,4 @@ This extension is a simple wrapper of the CLI `ag`, it relays user input to `ag`
 
 - [ ] search all file in the workspace.  
 - [ ] somehow test on non-macOS?
+- [ ] maybe multiline search support

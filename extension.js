@@ -3,10 +3,6 @@ const cp = require('child_process')
 const fs = require('fs')
 
 
-function _randomSuffix() {
-	return (Math.random() + 1).toString(36).substring(7);
-}
-
 function _writeToTempFileIfNotSaved(document) {
 	if (document.filename) {
 		// console.log(`file is a saved file ${document.filename}`)
@@ -19,25 +15,38 @@ function _writeToTempFileIfNotSaved(document) {
 	}
 }
 
+
 function _matchLineToQuickPickItems(line, searchStr) {
 	// return array of matches with line # and ranges, one line can have >1 matches. 
-	const lineNumberIndex = line.indexOf(';')
-	const rangeIndex = line.indexOf(':')
-	const lineNumber = parseInt(line.slice(0, lineNumberIndex))
-	const ranges = line.slice(lineNumberIndex + 1, rangeIndex).split(",")
-		.map(range => range.split(" ").map(ele => parseInt(ele)))
-	const lineContent = line.slice(rangeIndex + 1)
-	return ranges.map(([start, length]) => (
-		{
+	const match = /^(\d+);([\d ,]+)*:?(.*)$/.exec(line)
+	const lineNumber = parseInt(match[1])
+	const rangeString = match[2]
+	const lineContent = match[3]
+	if (!rangeString.trim()) {
+		// no range, only line number, mark the whole line 
+		return [{
 			label: `${lineNumber}: ${lineContent}`,
 			// this is a hack for quickpick to match 
-			description: searchStr, 
+			description: searchStr,
 			// b/c ag line matches starts from 1, vscode from 0
 			line: lineNumber - 1,
-			start: start,
-			end: start + length
-		}
-	))
+			start: 0,
+			end: lineContent.length
+
+		}]
+	} else {
+		return (rangeString.includes(",") ? rangeString.trim().split(",") : [rangeString.trim()])
+			.map(range => range.split(" ").map(ele => parseInt(ele)))
+			.map(range => ({
+				label: `${lineNumber}: ${lineContent}`,
+				// this is a hack for quickpick to match 
+				description: searchStr,
+				// b/c ag line matches starts from 1, vscode from 0
+				line: lineNumber - 1,
+				start: range[0],
+				end: range[0] + range[1]
+			}))
+	}
 }
 
 const PROMPT_STRING = "type 3 or more chars to search"
@@ -54,11 +63,11 @@ function _search(searchStr, filename, pick) {
 		// to avoid search on too short string. 
 		return
 	}
-	const shellCommand = `ag --ackmate '${searchStr}' ${filename}`
+	const shellCommand = `ag --nomultiline --ackmate '${searchStr}' ${filename}`
 	console.log(`search: ${shellCommand}`)
 	cp.exec(shellCommand, (err, stdout, stderr) => {
 		if (stdout) {
-			// console.log(stdout)
+			console.log(stdout)
 			pick.items = stdout.split("\n")
 				.filter(ele => ele && ele.trim().length)
 				.flatMap(ele => _matchLineToQuickPickItems(ele, searchStr))
@@ -100,7 +109,7 @@ function swipe() {
 	const currentSelection = vscode.window.activeTextEditor.selection
 	const pick = vscode.window.createQuickPick()
 	pick.canSelectMany = false
-	pick.matchOnDescription = true 
+	pick.matchOnDescription = true
 	pick.value = state.lastValue
 
 	pick.onDidChangeValue((value) => {
@@ -108,6 +117,7 @@ function swipe() {
 	})
 	pick.onDidAccept(() => {
 		const selected = _firstOrNull(pick.selectedItems)
+		console.log(`selected: ${JSON.stringify(selected)}`)
 		if (!selected) {
 			return
 		}
