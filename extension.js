@@ -16,40 +16,18 @@ function _writeToTempFileIfNotSaved(document) {
 }
 
 
-function _matchLineToQuickPickItems(line, searchStr) {
-	// return array of matches with line # and ranges, one line can have >1 matches. 
-	const match = /^(\d+);([\d ,]+)*:?(.*)$/.exec(line)
-	const lineNumber = parseInt(match[1])
-	const rangeString = match[2]
-	const lineContent = match[3]
-	if (!rangeString.trim()) {
-		// no range, only line number, mark the whole line 
-		return [{
-			label: `${lineNumber}: ${lineContent}`,
-			// this is a hack for quickpick to match 
-			description: searchStr,
-			// b/c ag line matches starts from 1, vscode from 0
-			line: lineNumber - 1,
-			start: 0,
-			end: lineContent.length
-
-		}]
-	} else {
-		return (rangeString.includes(",") ? rangeString.trim().split(",") : [rangeString.trim()])
-			.map(range => range.split(" ").map(ele => parseInt(ele)))
-			.map(range => ({
-				label: `${lineNumber}: ${lineContent}`,
-				// this is a hack for quickpick to match 
-				description: searchStr,
-				// b/c ag line matches starts from 1, vscode from 0
-				line: lineNumber - 1,
-				start: range[0],
-				end: range[0] + range[1]
-			}))
+function _matchLineToQuickPickItem(line, searchStr) {
+	const lineIndex = line.indexOf(":")
+	const lineNumber = parseInt(line.slice(0, lineIndex))
+	const lineContent = line.slice(lineIndex + 1)
+	return {
+		label: `${lineNumber} : ${lineContent}`,
+		description: searchStr,
+		line: lineNumber - 1
 	}
 }
 
-const PROMPT_STRING = "type 3 or more chars to search"
+const PROMPT_STRING = "type 2 or more chars to search"
 
 let state = {
 	// last searched string 
@@ -58,33 +36,62 @@ let state = {
 	lastSelected: null
 }
 
+function _getSearchCommand(searchStr, filename) {
+	if (!searchStr.trim().length) {
+		return null
+	}
+	const greps = searchStr.split(" ")
+		.map(subSearch => subSearch.trim())
+		.reduce((acc, subSearch) => {
+			if (!subSearch) {
+				return acc
+			}
+			// default case insensitive search 
+			let grepString = "grep -i"
+			if (!acc.length) {
+				// print line number 
+				grepString += " -n"
+			}
+			if (subSearch.startsWith('!')) {
+				// not pattern 
+				grepString += ` -v '${subSearch.slice(1)}'`
+			} else {
+				grepString += ` '${subSearch}'`
+			}
+			acc.push(grepString)
+			return acc
+		}, [])
+		.join(" | ")
+	return `cat ${filename} | ${greps}`
+}
 
 function _search(searchStr, filename, pick) {
-	if (searchStr.length < 3 || searchStr === PROMPT_STRING) {
-		// to avoid search on too short string. 
+	if (searchStr.length < 2 || searchStr === PROMPT_STRING) {
+		// to avoid search on too short a string. 
 		return
 	}
-	const shellCommand = `ag --nomultiline --ackmate '${searchStr}' ${filename}`
+
+	const shellCommand = _getSearchCommand(searchStr, filename)
 	console.log(`search: ${shellCommand}`)
 	cp.exec(shellCommand, (err, stdout, stderr) => {
 		if (stdout) {
 			console.log(stdout)
 			pick.items = stdout.split("\n")
 				.filter(ele => ele && ele.trim().length)
-				.flatMap(ele => _matchLineToQuickPickItems(ele, searchStr))
+				.map(ele => _matchLineToQuickPickItem(ele, searchStr))
 			// resume previous focus if possible
 			if (state.lastValue === searchStr && state.lastSelected) {
 				// javascript uses refenrece equal, we need to find the exact object that matches the last selected 
 				pick.activeItems = [pick.items.find(it => (it.label === state.lastSelected.label) &&
-					(it.line === state.lastSelected.line) &&
-					(it.start === state.lastSelected.start) &&
-					(it.end === state.lastSelected.end)
+					(it.description === state.lastSelected.description) &&
+					(it.line === state.lastSelected.line)
 				)]
 			}
 		}
 		if (err) {
 			console.log("stderr: " + stderr)
 			console.log('error: ' + err);
+			pick.items = []
 		}
 	});
 }
@@ -144,7 +151,7 @@ function swipe() {
 }
 
 function _resortCursor(pick, previousSelection) {
-	if (pick.selectedItems.length == 0) {
+	if (pick.selectedItems.length === 0) {
 		vscode.window.activeTextEditor.revealRange(
 			new vscode.Range(previousSelection.start, previousSelection.end),
 			vscode.TextEditorRevealType.InCenter);
@@ -153,8 +160,8 @@ function _resortCursor(pick, previousSelection) {
 }
 
 function _focusOnActiveItem(focused) {
-	const start = new vscode.Position(focused.line, focused.start);
-	const end = new vscode.Position(focused.line, focused.end);
+	const start = new vscode.Position(focused.line, 0);
+	const end = new vscode.Position(focused.line, 0);
 	vscode.window.activeTextEditor.revealRange(
 		new vscode.Range(start, end), vscode.TextEditorRevealType.InCenter);
 	vscode.window.activeTextEditor.selection = new vscode.Selection(start, end);
