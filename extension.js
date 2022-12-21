@@ -169,7 +169,7 @@ function _focusOnActiveItem(focused) {
 
 function activate(context) {
 	context.subscriptions.push(
-		vscode.commands.registerCommand('swiper.swiper-ag', () => swipe()));
+		vscode.commands.registerCommand('swiper.swiper-grep', () => swipe()));
 }
 
 function deactivate() { }

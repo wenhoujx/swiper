@@ -12,34 +12,35 @@ a dumb copycat of emacs swiper. Support search regex string in the current open 
 
 Install this extension.
 
-Install the [silver search](https://github.com/ggreer/the_silver_searcher).
-
 ## Quick tutorial
 
-Invoke command `Swiper: Swiper Silver` and start typing.
+Invoke command `Swiper: Swiper Grep` and start typing.
 
-default case insensitive search.
+basic rules:
 
-Remember to escape common regex character e.g. `\[` , `\.`
+1. Search use grep basic regex syntax.
+2. Search strings separated by space are AND-ed toegether. e.g. "a b" matched lines with "a" and "b" on the same line.
+3. Search string prefixed with `!` negates the search, "a !b" matches lines with "a" but not "b"
+4. Default case insensitive search.
 
 Some quick Example:
 
 ```sh
 # search widecard 
-command.*swiper 
+command*swiper 
 # lint OR display 
-lint|display
+lint\|display
+
+lint|display # searches the literal string "lint|display"
 # line starts with test 
 ^test
 ```
 
 ## Behind the scene
 
-This extension is a simple wrapper of the CLI `ag`, it relays user input to `ag` and parses its output.
+This extension is a simple wrapper of the CLI `grep`, it relays user input to `grep` and parses its output.
 
-The reason to use `ag` instead of grep is that i weant to later search all files in the current workspace.
-
-There is no good reason why I use `ag` over `rg` and any other tools. I am more familiar with `ag`.
+The reason to use `grep` over `ag` or `rg` is to avoid additional installation and work out of box.
 
 ## Motivation
 

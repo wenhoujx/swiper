@@ -22,14 +22,14 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:swiper.swiper-ag"
+    "onCommand:swiper.swiper-grep"
   ],
   "main": "./extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "swiper.swiper-ag",
-        "title": "Swiper Silver",
+        "command": "swiper.swiper-grep",
+        "title": "Swiper Grep",
         "category": "Swiper"
       }
     ]
