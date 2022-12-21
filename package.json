@@ -1,7 +1,7 @@
 {
   "name": "swiper",
   "displayName": "swiper",
-  "description": "",
+  "description": "simple copy of ivy swiper",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.74.0"
@@ -10,14 +10,17 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:swiper.helloWorld"
+    "onCommand:swiper.swiper"
   ],
   "main": "./extension.js",
   "contributes": {
-    "commands": [{
-      "command": "swiper.helloWorld",
-      "title": "Hello World"
-    }]
+    "commands": [
+      {
+        "command": "swiper.swiper",
+        "title": "Swiper",
+        "category": "Swiper"
+      }
+    ]
   },
   "scripts": {
     "lint": "eslint .",

@@ -9,17 +9,17 @@ function _randomSuffix() {
 
 function _writeToTempFileIfNotSaved(document) {
 	if (document.filename) {
-		console.log(`file is a saved file ${document.filename}`)
+		// console.log(`file is a saved file ${document.filename}`)
 		return document.filename
 	} else {
 		const filePath = "/tmp/vscode-swiper-tmp-buffer"
-		console.log(`file not saved, create a tmp file: ${filePath}`)
+		// console.log(`file not saved, create a tmp file: ${filePath}`)
 		fs.writeFileSync(filePath, document.getText(), 'utf8');
 		return filePath
 	}
 }
 
-function _matchLineToQuickPickItems(line) {
+function _matchLineToQuickPickItems(line, searchStr) {
 	// return array of matches with line # and ranges, one line can have >1 matches. 
 	const lineNumberIndex = line.indexOf(';')
 	const rangeIndex = line.indexOf(':')
@@ -30,6 +30,8 @@ function _matchLineToQuickPickItems(line) {
 	return ranges.map(([start, length]) => (
 		{
 			label: `${lineNumber}: ${lineContent}`,
+			// this is a hack for quickpick to match 
+			description: searchStr, 
 			// b/c ag line matches starts from 1, vscode from 0
 			line: lineNumber - 1,
 			start: start,
@@ -52,11 +54,14 @@ function _search(searchStr, filename, pick) {
 		// to avoid search on too short string. 
 		return
 	}
-	const shellCommand = `ag --ackmate ${searchStr} ${filename}`
-	pick.busy = true
+	const shellCommand = `ag --ackmate '${searchStr}' ${filename}`
+	console.log(`search: ${shellCommand}`)
 	cp.exec(shellCommand, (err, stdout, stderr) => {
 		if (stdout) {
-			pick.items = stdout.split("\n").flatMap(ele => _matchLineToQuickPickItems(ele))
+			// console.log(stdout)
+			pick.items = stdout.split("\n")
+				.filter(ele => ele && ele.trim().length)
+				.flatMap(ele => _matchLineToQuickPickItems(ele, searchStr))
 			// resume previous focus if possible
 			if (state.lastValue === searchStr && state.lastSelected) {
 				// javascript uses refenrece equal, we need to find the exact object that matches the last selected 
@@ -71,11 +76,10 @@ function _search(searchStr, filename, pick) {
 			console.log("stderr: " + stderr)
 			console.log('error: ' + err);
 		}
-		pick.busy = false
 	});
 }
 
-function _jumpTo({ line, start, end}) {
+function _jumpTo({ line, start, end }) {
 	vscode.window.activeTextEditor.selections = [
 		new vscode.Selection(
 			new vscode.Position(line, start),
@@ -96,6 +100,7 @@ function swipe() {
 	const currentSelection = vscode.window.activeTextEditor.selection
 	const pick = vscode.window.createQuickPick()
 	pick.canSelectMany = false
+	pick.matchOnDescription = true 
 	pick.value = state.lastValue
 
 	pick.onDidChangeValue((value) => {
@@ -146,7 +151,7 @@ function _focusOnActiveItem(focused) {
 
 function activate(context) {
 	context.subscriptions.push(
-		vscode.commands.registerCommand('swiper.helloWorld', () => swipe()));
+		vscode.commands.registerCommand('swiper.swiper', () => swipe()));
 }
 
 function deactivate() { }
