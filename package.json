@@ -10,14 +10,14 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:swiper.swiper"
+    "onCommand:swiper.swiper-ag"
   ],
   "main": "./extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "swiper.swiper",
-        "title": "Swiper",
+        "command": "swiper.swiper-ag",
+        "title": "Swiper Silver",
         "category": "Swiper"
       }
     ]

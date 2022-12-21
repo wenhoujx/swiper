@@ -9,15 +9,14 @@ copycat of emacs swiper
 ## Installation
 
 install this extension,
-install [silver-search](https://github.com/ggreer/the_silver_searcher)
-
-make sure you can run `ag <search-string> <file>`
 
 ## Quick tutorial
 
-Invoke command `Swiper: swiper` and start typing.
+Invoke command `Swiper: Swiper Silver` and start typing.
 
 default case insensitive search.
+
+Remember to escape common regex character e.g. `\[` , `\.`
 
 Some quick Example:
 

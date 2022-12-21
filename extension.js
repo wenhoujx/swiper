@@ -58,6 +58,7 @@ let state = {
 	lastSelected: null
 }
 
+
 function _search(searchStr, filename, pick) {
 	if (searchStr.length < 3 || searchStr === PROMPT_STRING) {
 		// to avoid search on too short string. 
@@ -161,7 +162,7 @@ function _focusOnActiveItem(focused) {
 
 function activate(context) {
 	context.subscriptions.push(
-		vscode.commands.registerCommand('swiper.swiper', () => swipe()));
+		vscode.commands.registerCommand('swiper.swiper-ag', () => swipe()));
 }
 
 function deactivate() { }
