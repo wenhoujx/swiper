@@ -1,8 +1,19 @@
 {
   "name": "swiper",
   "displayName": "swiper",
-  "description": "simple copy of ivy swiper",
+  "description": "Swiper search file content",
   "version": "0.0.1",
+  "author": {
+    "name": "Wenshuai Hou",
+    "email": "wenhoujx@gmail.com"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/wenhoujx/swiper",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wenhoujx/swiper"
+  },
+  "icon": "img/swiper-icon.jpeg",
   "engines": {
     "vscode": "^1.74.0"
   },
