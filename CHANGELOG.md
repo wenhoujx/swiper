@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.4.0] - 2020-12-22
+
+### Changed
+
+- better readme
+
 ## [1.3.0] - 2020-12-22
 
 ### Changed
