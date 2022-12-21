@@ -1,10 +1,10 @@
 # swiper
 
-a dumb copycat of emacs swiper. Support search regex string in the current open window.
+a copy of emacs swiper: the thing I missed most in vscode.
 
-> I only tested this on my macOS, Please file bug report or feature request.
+Search "swiper !not Test" matches a line with `SWiPeR Test` without mentions of `not` string.
 
-> This swiper does not match multiline (yet...)
+Support search regex string in the current open window.
 
 ![DEMO](./img/swiper-silver.gif)
 
@@ -59,9 +59,11 @@ I wrote a [blog](https://medium.com/@wenhoujx/boot-productivity-with-vscode-task
 
 ## TODO
 
-- [ ] search all file in the workspace.  
 - [ ] somehow test on non-macOS?
-- [ ] if upper case char typed, turn to case sensitive search for that subSearchString.
+- [x] search all file in the workspace.
+    >  Use VScode search feature.
+- [x] if upper case char typed, turn to case sensitive search for that subSearchString.
+    > Done
 
 ## misc
 
