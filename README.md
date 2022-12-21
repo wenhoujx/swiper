@@ -27,19 +27,22 @@ basic rules:
 1. Search use grep basic regex syntax.
 2. Search strings separated by space are AND-ed toegether. e.g. "a b" matched lines with "a" and "b" on the same line.
 3. Search string prefixed with `!` negates the search, "a !b" matches lines with "a" but not "b". Use `\!` if you want to match `"!"` literal string.
-4. Default case insensitive search.
+4. Default case insensitive search. Upcased search term matches case sensitively.
 
 Some quick Example:
 
 ```sh
 # search widecard 
 command*swiper 
+
 # lint OR display 
 lint\|display
 
 lint|display # searches the literal string "lint|display"
 # line starts with test 
 ^test
+
+a B # matches "aB", "AB"
 ```
 
 ## Behind the scene
