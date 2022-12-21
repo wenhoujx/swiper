@@ -53,3 +53,7 @@ I wrote a [blog](https://medium.com/@wenhoujx/boot-productivity-with-vscode-task
 - [ ] search all file in the workspace.  
 - [ ] somehow test on non-macOS?
 - [ ] maybe multiline search support
+
+## misc
+
+[publish URL](https://marketplace.visualstudio.com/manage/publishers/wenhoujx)
