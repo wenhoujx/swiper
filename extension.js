@@ -16,13 +16,14 @@ function _writeToTempFileIfNotSaved(document) {
 }
 
 
-function _matchLineToQuickPickItem(line, searchStr) {
+function _matchLineToQuickPickItem(line, parsed) {
 	const lineIndex = line.indexOf(":")
 	const lineNumber = parseInt(line.slice(0, lineIndex))
 	const lineContent = line.slice(lineIndex + 1)
 	return {
 		label: `${lineNumber} : ${lineContent}`,
-		description: searchStr,
+		description: parsed.map(p => p.pattern).join(" "),
+		parsed: parsed,
 		line: lineNumber - 1
 	}
 }
@@ -36,49 +37,67 @@ let state = {
 	lastSelected: null
 }
 
-function _getSearchCommand(searchStr, filename) {
+
+function _parseSearchString(searchStr) {
 	if (!searchStr.trim().length) {
+		return []
+	}
+	return searchStr.split(" ")
+		.map(subSearch => subSearch.trim())
+		.filter(subSearch => subSearch)
+		.map(subSearch => ({
+			pattern: subSearch,
+			caseSensitive: /[A-Z]/.test(subSearch),
+			negate: subSearch.startsWith("!")
+		}))
+}
+function _getSearchCommand(parsed, filename) {
+	if (!parsed.length) {
 		return null
 	}
-	const greps = searchStr.split(" ")
-		.map(subSearch => subSearch.trim())
-		.reduce((acc, subSearch) => {
-			if (!subSearch) {
-				return acc
-			}
-			// default case insensitive search 
-			let grepString = "grep -i"
-			if (!acc.length) {
-				// print line number 
-				grepString += " -n"
-			}
-			if (subSearch.startsWith('!')) {
-				// not pattern 
-				grepString += ` -v '${subSearch.slice(1)}'`
-			} else {
-				grepString += ` '${subSearch}'`
-			}
-			acc.push(grepString)
-			return acc
-		}, [])
+
+	const greps = parsed.reduce((acc, subSearch) => {
+		// default case insensitive search 
+		let grepString = "grep"
+		if (!subSearch.caseSensitive) {
+			grepString += " -i"
+		}
+		if (!acc.length) {
+			// print line number in the first grep 
+			grepString += " -n"
+		}
+		if (subSearch.negate) {
+			// not pattern 
+			grepString += ` -v '${subSearch.pattern.slice(1)}'`
+		} else {
+			grepString += ` '${subSearch.pattern}'`
+		}
+		acc.push(grepString)
+		return acc
+	}, [])
 		.join(" | ")
 	return `cat ${filename} | ${greps}`
 }
+
+
 
 function _search(searchStr, filename, pick) {
 	if (searchStr.length < 2 || searchStr === PROMPT_STRING) {
 		// to avoid search on too short a string. 
 		return
 	}
-
-	const shellCommand = _getSearchCommand(searchStr, filename)
+	const parsed = _parseSearchString(searchStr)
+	const shellCommand = _getSearchCommand(parsed, filename)
+	if (!shellCommand) {
+		return
+	}
 	console.log(`search: ${shellCommand}`)
 	cp.exec(shellCommand, (err, stdout, stderr) => {
 		if (stdout) {
 			console.log(stdout)
 			pick.items = stdout.split("\n")
 				.filter(ele => ele && ele.trim().length)
-				.map(ele => _matchLineToQuickPickItem(ele, searchStr))
+				.map(ele => _matchLineToQuickPickItem(ele, parsed))
 			// resume previous focus if possible
 			if (state.lastValue === searchStr && state.lastSelected) {
 				// javascript uses refenrece equal, we need to find the exact object that matches the last selected 
@@ -96,11 +115,24 @@ function _search(searchStr, filename, pick) {
 	});
 }
 
-function _jumpTo({ line, start, end }) {
+function _cleanPattern(pattern) {
+	let cleaned = pattern
+	cleaned.replaceAll("\!", "!")
+	if (cleaned.includes("\\")) {
+		return pattern.slice(0, cleaned.indexOf("\\"))
+	} else {
+		return cleaned
+	}
+}
+function _jumpTo(selected) {
+	const { line, parsed } = selected
+	let pattern = _cleanPattern(parsed.reverse().find(p => (!p.negate)).pattern)
+	console.log(`pattern: ${pattern}`)
+	const start = vscode.window.activeTextEditor.document.lineAt(line).text.indexOf(pattern)
 	vscode.window.activeTextEditor.selections = [
 		new vscode.Selection(
 			new vscode.Position(line, start),
-			new vscode.Position(line, end))]
+			new vscode.Position(line, start + pattern.length))]
 }
 
 function _firstOrNull(items) {

@@ -58,7 +58,7 @@ I wrote a [blog](https://medium.com/@wenhoujx/boot-productivity-with-vscode-task
 
 - [ ] search all file in the workspace.  
 - [ ] somehow test on non-macOS?
-- [ ] maybe multiline search support
+- [ ] if upper case char typed, turn to case sensitive search for that subSearchString.
 
 ## misc
 
