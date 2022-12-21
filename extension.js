@@ -146,9 +146,10 @@ function _firstOrNull(items) {
 function swipeWordAtCursor() {
 	const editor = vscode.window.activeTextEditor
 	const currentSelection = vscode.window.activeTextEditor.selection
-	const word = editor.document.getText(editor.document.getWordRangeAtPosition(currentSelection.start))
+	// either selection or cursor
+	const word = editor.document.getText(editor.selection) || editor.document.getText(editor.document.getWordRangeAtPosition(currentSelection.start))
 	state = {
-		lastValue: word,
+		lastValue: word, // set last value with current word or selection
 		lastSelected: null
 	}
 	swipe()
