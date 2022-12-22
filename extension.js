@@ -2,7 +2,50 @@ const vscode = require('vscode');
 const cp = require('child_process')
 const fs = require('fs')
 
-
+const styles = [
+	vscode.window.createTextEditorDecorationType(
+		{
+			border: "solid",
+			borderWidth: 'thin',
+			borderColor: "red"
+		}
+	),
+	vscode.window.createTextEditorDecorationType(
+		{
+			border: "solid",
+			borderWidth: 'thin',
+			borderColor: "blue"
+		}
+	),
+	vscode.window.createTextEditorDecorationType(
+		{
+			border: "solid",
+			borderWidth: 'thin',
+			borderColor: "green"
+		}
+	),
+	vscode.window.createTextEditorDecorationType(
+		{
+			border: "solid",
+			borderWidth: 'thin',
+			borderColor: "yellow"
+		}
+	),
+	vscode.window.createTextEditorDecorationType(
+		{
+			border: "solid",
+			borderWidth: 'thin',
+			borderColor: "aqua"
+		}
+	),
+	vscode.window.createTextEditorDecorationType(
+		{
+			border: "solid",
+			borderWidth: 'thin',
+			borderColor: "cyan"
+		}
+	),
+]
 function _writeToTempFileIfNotSaved(document) {
 	if (document.filename) {
 		// console.log(`file is a saved file ${document.filename}`)
@@ -80,7 +123,6 @@ function _getSearchCommand(parsed, filename) {
 }
 
 
-
 function _search(searchStr, filename, pick) {
 	if (searchStr.length < 2 || searchStr === PROMPT_STRING) {
 		// to avoid search on too short a string. 
@@ -100,12 +142,13 @@ function _search(searchStr, filename, pick) {
 				.map(ele => _matchLineToQuickPickItem(ele, parsed))
 			// resume previous focus if possible
 			if (state.lastValue === searchStr && state.lastSelected) {
-				// javascript uses refenrece equal, we need to find the exact object that matches the last selected 
+				// javascript uses reference equal, we need to find the exact object that matches the last selected 
 				pick.activeItems = [pick.items.find(it => (it.label === state.lastSelected.label) &&
 					(it.description === state.lastSelected.description) &&
 					(it.line === state.lastSelected.line)
 				)]
 			}
+			_updateMatchColor(pick.items)
 		}
 		if (err) {
 			console.log("stderr: " + stderr)
@@ -113,6 +156,58 @@ function _search(searchStr, filename, pick) {
 			pick.items = []
 		}
 	});
+}
+
+function _findMatchedIndices(item) {
+	const { line, parsed } = item
+	const lineText = vscode.window.activeTextEditor.document.lineAt(line).text
+
+	return parsed
+		.filter(p => !p.negate)
+		.map(p => {
+			const pattern = _cleanPattern(p.pattern)
+			if (p.caseSensitive) {
+				return [lineText.indexOf(pattern), pattern.length]
+			} else {
+				return [lineText.toLowerCase().indexOf(pattern), pattern.length]
+			}
+		})
+}
+
+function _clearDecorations() {
+	styles.forEach(s => vscode.window.activeTextEditor.setDecorations(s, []))
+}
+
+function _updateMatchColor(items) {
+	_clearDecorations()
+	const ranges = items.map(item => {
+		const indices = _findMatchedIndices(item)
+		return indices.map(ind => {
+			const [start, length] = ind
+			if (start === -1) {
+				console.log(`item: ${JSON.stringify(item)}`)
+				// keep coloring aligned
+				return null
+			} else {
+				return new vscode.Range(
+					new vscode.Position(item.line, start),
+					new vscode.Position(item.line, start + length))
+			}
+		})
+	})
+
+	const colors = Array.from(Array(styles.length), () => [])
+	for (const r of ranges) {
+		for (let i = 0; i < r.length; i++) {
+			const range = r[i]
+			if (range) {
+				colors[i % styles.length].push(range)
+			}
+		}
+	}
+	for (let i = 0; i < colors.length; i++) {
+		vscode.window.activeTextEditor.setDecorations(styles[i], colors[i])
+	}
 }
 
 function _cleanPattern(pattern) {
@@ -125,14 +220,14 @@ function _cleanPattern(pattern) {
 	}
 }
 function _jumpTo(selected) {
-	const { line, parsed } = selected
-	let pattern = _cleanPattern(parsed.reverse().find(p => (!p.negate)).pattern)
-	console.log(`pattern: ${pattern}`)
-	const start = vscode.window.activeTextEditor.document.lineAt(line).text.indexOf(pattern)
+	// find the last 
+	const firstIndex = _firstOrNull(_findMatchedIndices(selected).reverse())
+	const start = firstIndex ? firstIndex[0] : 0
+	const end = firstIndex ? firstIndex[0] + firstIndex[1] : 0
 	vscode.window.activeTextEditor.selections = [
 		new vscode.Selection(
-			new vscode.Position(line, start),
-			new vscode.Position(line, start + pattern.length))]
+			new vscode.Position(selected.line, start),
+			new vscode.Position(selected.line, end))]
 }
 
 function _firstOrNull(items) {
@@ -190,6 +285,7 @@ function swipe() {
 	})
 	pick.onDidHide(() => {
 		// resort previous cursor position if nothing selected
+		_clearDecorations()
 		_resortCursor(pick, currentSelection)
 	})
 	pick.show()
