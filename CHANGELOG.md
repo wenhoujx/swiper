@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.6.0] - 2020-12-23
+
+### Changed 
+
+- now use `echo` command instead of relying on FS, should work on Windows. 
+
 ## [1.5.0] - 2020-12-22
 
 ### Added
