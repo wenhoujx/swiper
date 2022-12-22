@@ -1,10 +1,23 @@
 # Change Log
 
+## [2.0.0] - 2020-12-23
+
+### Changed
+
+- rename command to remove `grep`, since it's not backed by `grep` anymore. SORRY.
+- use javascript string manipulation and regex, instead of grep, for more control.
+
+## [1.7.0] - 2020-12-23
+
+### Changed
+
+- fix bug, now use globalStorageUri for file system
+
 ## [1.6.0] - 2020-12-23
 
-### Changed 
+### Changed
 
-- now use `echo` command instead of relying on FS, should work on Windows. 
+- now use `echo` command instead of relying on FS, should work on Windows.
 
 ## [1.5.0] - 2020-12-22
 

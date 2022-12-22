@@ -2,7 +2,7 @@
   "name": "swiper",
   "displayName": "swiper",
   "description": "Swiper search file content",
-  "version": "1.6.0",
+  "version": "2.0.0",
   "publisher": "wenhoujx",
   "author": {
     "name": "Wenshuai Hou",
@@ -22,20 +22,20 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:swiper.swiper-grep", 
-    "onCommand:swiper.swiper.swiper-grep-word-at-cursor"
+    "onCommand:swiper.swiper", 
+    "onCommand:swiper.swiper.swiper-word-at-cursor"
   ],
   "main": "./extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "swiper.swiper-grep",
-        "title": "Swiper Grep/Resume",
+        "command": "swiper.swiper",
+        "title": "Swiper Search/Resume",
         "category": "Swiper"
       }, 
       {
-        "command": "swiper.swiper-grep-word-at-cursor",
-        "title": "Swiper Grep at Cursor",
+        "command": "swiper.swiper-word-at-cursor",
+        "title": "Swiper Search at Cursor",
         "category": "Swiper"
       }
     ]
