@@ -1,8 +1,8 @@
 # swiper
 
-Fuzzy search lines in current window. 
+Fuzzy search lines in current window.
 
-Supports regex, negate, match highting, case sensitive search. 
+Supports regex, negate, match highting, case sensitive search.
 
 a copy of emacs swiper: the thing I missed most in vscode.
 
