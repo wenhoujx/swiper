@@ -64,6 +64,7 @@ I wrote a [blog](https://medium.com/@wenhoujx/boot-productivity-with-vscode-task
     >  Use VScode search feature.
 - [x] if upper case char typed, turn to case sensitive search for that subSearchString.
     > Done
+- [ ] do not save tmp file for unsaved buffer. 
 
 ## misc
 
