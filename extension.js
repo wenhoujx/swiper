@@ -154,6 +154,7 @@ function _search(searchStr, filename, pick) {
 			console.log("stderr: " + stderr)
 			console.log('error: ' + err);
 			pick.items = []
+			_clearDecorations()
 		}
 	});
 }
@@ -179,6 +180,7 @@ function _clearDecorations() {
 }
 
 function _updateMatchColor(items) {
+	// im not very happy with the code in this func 
 	_clearDecorations()
 	const ranges = items.map(item => {
 		const indices = _findMatchedIndices(item)
@@ -212,7 +214,7 @@ function _updateMatchColor(items) {
 
 function _cleanPattern(pattern) {
 	let cleaned = pattern
-	cleaned.replaceAll("\!", "!")
+	cleaned = cleaned.replaceAll("\\!", "!")
 	if (cleaned.includes("\\")) {
 		return pattern.slice(0, cleaned.indexOf("\\"))
 	} else {

@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.5.0] - 2020-12-22
+
+### Added
+
+- now has border colors around the matched terms.
+
 ## [1.4.0] - 2020-12-22
 
 ### Changed
