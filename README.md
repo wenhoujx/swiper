@@ -37,6 +37,7 @@ Some quick Example:
 # search wildcard
 /command.*swiper/
 
+a !b # matches lines with a but not b 
 # lint OR display 
 /lint|display/
 
@@ -45,6 +46,8 @@ lint|display # searches the literal string "lint|display"
 ^test
 
 a B # matches "aB", "AB"
+
+/\(.*\)/ # matches paren  
 ```
 
 ## Motivation
