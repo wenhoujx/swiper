@@ -1,5 +1,11 @@
 # Change Log
 
+## [2.0.5] - 2020-12-23
+
+### Changed
+
+- remove annoying debug console logs.
+
 ## [2.0.4] - 2020-12-23
 
 ### Changed

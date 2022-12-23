@@ -1,5 +1,7 @@
 const vscode = require('vscode');
 
+const isDebug = false
+
 // TODO: not sure how to select the best list of colors according to the theme.
 const styles = [
 	vscode.window.createTextEditorDecorationType(
@@ -144,9 +146,9 @@ function _search(searchStr, pick) {
 	}
 	const parsed = _parseSearchString(searchStr)
 	const items = _searchContent(parsed)
-	console.log(searchStr)
-	console.log(JSON.stringify(parsed))
-	console.log(JSON.stringify(items))
+	isDebug && console.log(searchStr)
+	isDebug && console.log(JSON.stringify(parsed))
+	isDebug && console.log(JSON.stringify(items))
 
 	const doc = vscode.window.activeTextEditor.document
 	pick.items = items.map(match => ({
@@ -239,7 +241,7 @@ function swipe() {
 	})
 	pick.onDidAccept(() => {
 		const selected = _firstOrNull(pick.selectedItems)
-		console.log(`selected: ${JSON.stringify(selected)}`)
+		isDebug && console.log(`selected: ${JSON.stringify(selected)}`)
 		if (!selected) {
 			return
 		}
