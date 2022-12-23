@@ -26,7 +26,7 @@ Invoke command `Swiper: Swiper` and start typing.
 
 basic rules:
 
-1. Search either literal string e.g. `abc` or javascript regex `/.../`.
+n1. Search either literal string e.g. `abc` or javascript regex `/.../`.
 2. Search strings separated by space are AND-ed together. e.g. "a b" matched lines with "a" and "b" on the same line.
 3. Search string prefixed with `!` negates the search, "a !b" matches lines with "a" but not "b". Use regex `/\!/` if you want to match `"!"` literal string.
    Search string starts with `!` does not contribute to the border highlights.
@@ -56,6 +56,8 @@ a B # matches "aB", "AB"
 ## Motivation
 
 I come from emacs to VScode, vscode is awesome, but misses a few features i do daily in emacs. This is one of them.
+
+More on my motivation: [medium link](https://medium.com/@wenhoujx/vscode-productivity-quick-narrow-down-to-the-searched-line-1f8052acac0b)
 
 I wrote a [blog](https://medium.com/@wenhoujx/boot-productivity-with-vscode-tasks-c98fa0f8b567) that covers achieving some my other emacs workflows in VScode.
 

@@ -1,5 +1,11 @@
 # Change Log
 
+## [2.0.4] - 2020-12-23
+
+### Changed
+
+- shameless plug my medium blog in readme.
+
 ## [2.0.0] - 2020-12-23
 
 ### Changed
