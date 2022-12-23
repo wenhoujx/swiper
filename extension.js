@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 
+// TODO: not sure how to select the best list of colors according to the theme.
 const styles = [
 	vscode.window.createTextEditorDecorationType(
 		{
@@ -66,7 +67,6 @@ function _parseSearchString(searchStr) {
 		.filter(subSearch => subSearch)
 		.map(subSearch => {
 			const isNegate = subSearch.startsWith("!")
-
 			return ({
 				pattern: isNegate ? subSearch.slice(1) : subSearch,
 				isRegex: isNegate ? subSearch.startsWith("!/") : subSearch.startsWith("/"),
@@ -104,24 +104,31 @@ function _searchLine(lineIndex, line, parsed) {
 			const regex = new RegExp(pattern, flags);
 			const m = regex.exec(line)
 			if (!m && !p.negate) {
+				// regular mode, and this line doesn't match 
 				return null
 			} else if (m && p.negate) {
+				// intentionally skip for case when matches but should be ignored. 
 				return null
 			} else if (!m && p.negate) {
+				// negate, and doesn't match, should keep this line. 
 				continue
 			} else {
+				// normal mode, record the matched range. 
 				matchedRange.ranges.push([m.index, m[0].length])
 			}
 		} else {
 			const m = p.caseSensitive ? line.indexOf(p.pattern) : line.toLowerCase().indexOf(p.pattern)
 			if (p.negate) {
 				if (m !== -1) {
+					// intentionally skip this line. 
 					return null
 				}
 			} else {
 				if (m === -1) {
+					// normal mode, no match 
 					return null
 				} else {
+					// normal mode, matches, record range. 
 					matchedRange.ranges.push([m, p.pattern.length])
 				}
 			}
@@ -144,14 +151,16 @@ function _search(searchStr, pick) {
 	const doc = vscode.window.activeTextEditor.document
 	pick.items = items.map(match => ({
 		label: `${match.line}: ${doc.lineAt(match.line).text}`,
-		// force quickpick to match the description instead of the line content itself.
-		description: searchStr, 
+		// force vscode quickpick to match the description instead of the line content itself.
+		// otherwise quickpick filters to nothing. 
+		description: searchStr,
 		...match
 	}))
 	if (state.lastValue === searchStr && state.lastSelected) {
 		// javascript uses reference equal, we need to find the exact object that matches the last selected 
-		pick.activeItems = [pick.items.find(it => (it.label === state.lastSelected.label) &&
-			(it.description === state.lastSelected.description) &&
+		pick.activeItems = [pick.items.find(it =>
+			// same label, same line #. 
+			(it.label === state.lastSelected.label) &&
 			(it.line === state.lastSelected.line)
 		)]
 	}
@@ -164,12 +173,12 @@ function _clearDecorations() {
 
 function _updateMatchColor(items) {
 	_clearDecorations()
-
 	const colors = Array.from(Array(styles.length), () => [])
 	for (const item of items) {
 		for (let i = 0; i < item.ranges.length; i++) {
 			const [start, length] = item.ranges[i]
 			if (length === 0) {
+				// no length, no need to set border. 
 				continue
 			}
 			colors[i % styles.length].push(
@@ -187,10 +196,10 @@ function _updateMatchColor(items) {
 
 
 function _jumpTo(selected) {
-	// find the last 
-	const firstIndex = _firstOrNull(selected.ranges.reverse())
-	const start = firstIndex ? firstIndex[0] : 0
-	const end = firstIndex ? firstIndex[0] + firstIndex[1] : 0
+	// find the last range which corresponds to the last search term 
+	const lastIndex = _firstOrNull(selected.ranges.reverse())
+	const start = lastIndex ? lastIndex[0] : 0
+	const end = lastIndex ? lastIndex[0] + lastIndex[1] : 0
 	vscode.window.activeTextEditor.selections = [
 		new vscode.Selection(
 			new vscode.Position(selected.line, start),
@@ -251,12 +260,12 @@ function swipe() {
 	pick.onDidHide(() => {
 		// resort previous cursor position if nothing selected
 		_clearDecorations()
-		_resortCursor(pick, currentSelection)
+		_resortCursorIfNoneSelected(pick, currentSelection)
 	})
 	pick.show()
 }
 
-function _resortCursor(pick, previousSelection) {
+function _resortCursorIfNoneSelected(pick, previousSelection) {
 	if (pick.selectedItems.length === 0) {
 		vscode.window.activeTextEditor.revealRange(
 			new vscode.Range(previousSelection.start, previousSelection.end),
