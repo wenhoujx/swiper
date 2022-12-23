@@ -57,9 +57,9 @@ a B # matches "aB", "AB"
 
 I come from emacs to VScode, vscode is awesome, but misses a few features i do daily in emacs. This is one of them.
 
-More on my motivation: [medium link](https://medium.com/@wenhoujx/vscode-productivity-quick-narrow-down-to-the-searched-line-1f8052acac0b)
+More on my motivation: [medium link](https://medium.com/@wenhoujx/vscode-productivity-quick-narrow-down-to-the-searched-line-1f8052acac0b?source=friends_link&sk=995200d35ae6570c186c3322be2816c7)
 
-I wrote a [blog](https://medium.com/@wenhoujx/boot-productivity-with-vscode-tasks-c98fa0f8b567) that covers achieving some my other emacs workflows in VScode.
+I wrote a [blog](https://medium.com/@wenhoujx/boot-productivity-with-vscode-tasks-c98fa0f8b567?source=friends_link&sk=1b435e151d2982a2e1c53ff5dcdba5b1) that covers achieving some my other emacs workflows in VScode.
 
 ## TODO
 
