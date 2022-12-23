@@ -26,9 +26,10 @@ Invoke command `Swiper: Swiper` and start typing.
 
 basic rules:
 
-1. Search either literal string or javascript regex `/.../`
+1. Search either literal string e.g. `abc` or javascript regex `/.../`.
 2. Search strings separated by space are AND-ed together. e.g. "a b" matched lines with "a" and "b" on the same line.
 3. Search string prefixed with `!` negates the search, "a !b" matches lines with "a" but not "b". Use regex `/\!/` if you want to match `"!"` literal string.
+   Search string starts with `!` does not contribute to the border highlights.
 4. Default case insensitive search. Upcased search term matches case sensitively.
 
 Some quick Example:
@@ -37,17 +38,19 @@ Some quick Example:
 # search wildcard
 /command.*swiper/
 
-a !b # matches lines with a but not b 
-# lint OR display 
-/lint|display/
+a b matches lines with a and b
+a !b # matches lines with a but not b
 
+/lint|display/ # lint OR display
 lint|display # searches the literal string "lint|display"
-# line starts with test 
-^test
+
+# line starts with test
+/^test/
 
 a B # matches "aB", "AB"
 
-/\(.*\)/ # matches paren  
+/\(.*\)/ # matches paren
+!/\(.*\)/ # do not match paren
 ```
 
 ## Motivation
