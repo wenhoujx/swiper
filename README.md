@@ -22,11 +22,11 @@ Install this extension.
 
 ## Quick tutorial
 
-Invoke command `Swiper: Swiper` and start typing.
+Invoke command `Swiper: Swiper Search/Resume` and start typing.
 
 basic rules:
 
-n1. Search either literal string e.g. `abc` or javascript regex `/.../`.
+1. Search either literal string e.g. `abc` or javascript regex `/.../`.
 2. Search strings separated by space are AND-ed together. e.g. "a b" matched lines with "a" and "b" on the same line.
 3. Search string prefixed with `!` negates the search, "a !b" matches lines with "a" but not "b". Use regex `/\!/` if you want to match `"!"` literal string.
    Search string starts with `!` does not contribute to the border highlights.
@@ -63,7 +63,7 @@ I wrote a [blog](https://medium.com/@wenhoujx/boot-productivity-with-vscode-task
 
 ## TODO
 
-- [ ] somehow test on non-macOS?
+- [x] somehow test on non-macOS?
 - [x] search all file in the workspace.
     >  Use VScode search feature.
 - [x] if upper case char typed, turn to case sensitive search for that subSearchString.
