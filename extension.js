@@ -7,43 +7,43 @@ const styles = [
 	vscode.window.createTextEditorDecorationType(
 		{
 			border: "solid",
-			borderWidth: 'thin',
+			borderWidth: 'medium',
 			borderColor: "red"
 		}
 	),
 	vscode.window.createTextEditorDecorationType(
 		{
 			border: "solid",
-			borderWidth: 'thin',
-			borderColor: "blue"
+			borderWidth: 'medium',
+			borderColor: "cyan"
 		}
 	),
 	vscode.window.createTextEditorDecorationType(
 		{
 			border: "solid",
-			borderWidth: 'thin',
+			borderWidth: 'medium',
 			borderColor: "green"
 		}
 	),
 	vscode.window.createTextEditorDecorationType(
 		{
 			border: "solid",
-			borderWidth: 'thin',
+			borderWidth: 'medium',
 			borderColor: "yellow"
 		}
 	),
 	vscode.window.createTextEditorDecorationType(
 		{
 			border: "solid",
-			borderWidth: 'thin',
-			borderColor: "aqua"
+			borderWidth: 'medium',
+			borderColor: "BlueViolet"
 		}
 	),
 	vscode.window.createTextEditorDecorationType(
 		{
 			border: "solid",
-			borderWidth: 'thin',
-			borderColor: "cyan"
+			borderWidth: 'medium',
+			borderColor: "Fuchsia"
 		}
 	),
 ]
