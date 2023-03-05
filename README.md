@@ -73,3 +73,11 @@ I wrote a [blog](https://medium.com/@wenhoujx/boot-productivity-with-vscode-task
 ## misc
 
 [publish URL](https://marketplace.visualstudio.com/manage/publishers/wenhoujx)
+
+## dev guide
+
+```sh
+# make whatever change, bump package.json 
+vsce package
+# then release to the vscode marketplace publish page.
+```
