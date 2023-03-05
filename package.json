@@ -1,7 +1,7 @@
 {
   "name": "swiper",
   "displayName": "swiper",
-  "description": "Swiper fuzzy search file content",
+  "description": "Emacs style swiper fuzzy search buffer/window",
   "version": "2.0.8",
   "publisher": "wenhoujx",
   "author": {
