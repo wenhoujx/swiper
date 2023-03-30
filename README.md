@@ -61,7 +61,7 @@ You can configure this extension via `command palette` (F1 on my machine) -> `Pr
   ...
   "swiper.selectMatch": false
 }
-``
+```
 
 **Configuration points of this extension**
 
