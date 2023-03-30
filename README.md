@@ -53,6 +53,20 @@ a B # matches "aB", "AB"
 !/\(.*\)/ # do not match paren
 ```
 
+## Configuration
+
+You can configure this extension via `command palette` (F1 on my machine) -> `Preferences: Open User Settings (JSON)`, add the following snippet to the open configuration file:
+
+```json
+  ...
+  "swiper.selectMatch": false
+}
+``
+
+**Configuration points of this extension**
+
+- `swiper.selectMatch` (default true), controls if the picked match is selected. Set to false, cursor jumps to the end of the match word.
+
 ## Motivation
 
 I come from emacs to VScode, vscode is awesome, but misses a few features i do daily in emacs. This is one of them.

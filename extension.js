@@ -202,9 +202,10 @@ function _jumpTo(selected) {
 	const lastIndex = _firstOrNull(selected.ranges.reverse())
 	const start = lastIndex ? lastIndex[0] : 0
 	const end = lastIndex ? lastIndex[0] + lastIndex[1] : 0
+	const selectMatch = vscode.workspace.getConfiguration("swiper").get("selectMatch")
 	vscode.window.activeTextEditor.selections = [
 		new vscode.Selection(
-			new vscode.Position(selected.line, start),
+			new vscode.Position(selected.line, selectMatch ? start : end),
 			new vscode.Position(selected.line, end))]
 }
 

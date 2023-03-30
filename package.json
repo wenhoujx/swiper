@@ -2,7 +2,7 @@
   "name": "swiper",
   "displayName": "swiper",
   "description": "Emacs style swiper fuzzy search buffer/window",
-  "version": "2.0.9",
+  "version": "2.0.11",
   "publisher": "wenhoujx",
   "author": {
     "name": "Wenshuai Hou",
@@ -22,7 +22,7 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:swiper.swiper", 
+    "onCommand:swiper.swiper",
     "onCommand:swiper.swiper.swiper-word-at-cursor"
   ],
   "main": "./extension.js",
@@ -32,13 +32,23 @@
         "command": "swiper.swiper",
         "title": "Swiper Search/Resume",
         "category": "Swiper"
-      }, 
+      },
       {
         "command": "swiper.swiper-word-at-cursor",
         "title": "Swiper Search at Cursor",
         "category": "Swiper"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Swiper",
+      "properties": {
+        "swiper.selectMatch": {
+          "type": "boolean",
+          "default": true,
+          "description": "Select the picked match text by swiper"
+        }
+      }
+    }
   },
   "scripts": {
     "lint": "eslint .",
