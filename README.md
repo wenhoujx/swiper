@@ -38,7 +38,7 @@ Some quick Example:
 # search wildcard
 /command.*swiper/
 
-a b matches lines with a and b
+a b # matches lines with a and b
 a !b # matches lines with a but not b
 
 /lint|display/ # lint OR display
