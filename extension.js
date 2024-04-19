@@ -152,10 +152,11 @@ function _search(searchStr, pick) {
 
 	const doc = vscode.window.activeTextEditor.document
 	pick.items = items.map(match => ({
-		label: `${match.line}: ${doc.lineAt(match.line).text}`,
-		// force vscode quickpick to match the description instead of the line content itself.
+		label: `${_leftPad(match.line)}: ${searchStr} `,
+		// IMPORTANT: set description forces vscode quickpick to match the description 
+		// instead of the line content itself.
 		// otherwise quickpick filters to nothing. 
-		description: searchStr,
+		description: `${doc.lineAt(match.line).text}`,
 		...match
 	}))
 	if (state.lastValue === searchStr && state.lastSelected) {
@@ -167,6 +168,11 @@ function _search(searchStr, pick) {
 		)]
 	}
 	_updateMatchColor(items)
+}
+
+function _leftPad(lineN) {
+	const lineNStr = lineN.toString()
+	return "0".repeat(Math.max(0, 4 - lineNStr.length)) + lineNStr
 }
 
 function _clearDecorations() {

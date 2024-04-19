@@ -1,5 +1,11 @@
 # Change Log
 
+## [2.1.0] - 2024-04-19
+
+### Changed
+
+- fixed line sort order, smaller line number are offered first. Note I had to hack for this to happen by moving searchStr to the beginning of the quickPickItem.
+
 ## [2.0.10] - 2022-12-23
 
 ### Added
