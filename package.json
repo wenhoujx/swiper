@@ -2,7 +2,7 @@
   "name": "swiper",
   "displayName": "swiper",
   "description": "Emacs style swiper fuzzy search buffer/window",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "publisher": "wenhoujx",
   "author": {
     "name": "Wenshuai Hou",
@@ -42,6 +42,11 @@
     "configuration": {
       "title": "Swiper",
       "properties": {
+        "swiper.searchFromCursor": {
+          "type": "boolean",
+          "default": false,
+          "description": "Start searching from the cursor position instead of the beginning of the file"
+        },
         "swiper.selectMatch": {
           "type": "boolean",
           "default": true,

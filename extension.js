@@ -81,8 +81,13 @@ function _parseSearchString(searchStr) {
 function _searchContent(parsed) {
 	const items = []
 	const doc = vscode.window.activeTextEditor.document
+	const startLine = vscode.workspace.getConfiguration("swiper").get("searchFromCursor") 
+		? vscode.window.activeTextEditor.selection.active.line 
+		: 0;
+	
 	for (let i = 0; i < doc.lineCount; i++) {
-		const matches = _searchLine(i, doc.lineAt(i).text, parsed)
+		const lineIndex = (startLine + i) % doc.lineCount;
+		const matches = _searchLine(lineIndex, doc.lineAt(lineIndex).text, parsed)
 		if (matches) {
 			items.push(matches)
 		}
@@ -166,6 +171,9 @@ function _search(searchStr, pick) {
 			(it.label === state.lastSelected.label) &&
 			(it.line === state.lastSelected.line)
 		)]
+	} else if (items.length > 0) {
+		// Set the first item as active if there's no last selected item
+		pick.activeItems = [pick.items[0]]
 	}
 	_updateMatchColor(items)
 }
@@ -298,6 +306,12 @@ function activate(context) {
 		vscode.commands.registerCommand('swiper.swiper-word-at-cursor', () =>
 			swipeWordAtCursor()
 		));
+	context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(e => {
+		if (e.affectsConfiguration("swiper.searchFromCursor")) {
+			const newConfig = vscode.workspace.getConfiguration("swiper");
+			const searchFromCursor = newConfig.get("searchFromCursor", false);
+		}
+	}));
 }
 
 function deactivate() { }
