@@ -152,11 +152,11 @@ function _search(searchStr, pick) {
 
 	const doc = vscode.window.activeTextEditor.document
 	pick.items = items.map(match => ({
-		label: `${_leftPad(match.line)}: ${searchStr} `,
+		label: `${_leftPad(match.line+1)}: ${searchStr} `,
 		// IMPORTANT: set description forces vscode quickpick to match the description 
 		// instead of the line content itself.
 		// otherwise quickpick filters to nothing. 
-		description: `${doc.lineAt(match.line).text}`,
+		description: `${doc.lineAt(match.line+1).text}`,
 		...match
 	}))
 	if (state.lastValue === searchStr && state.lastSelected) {

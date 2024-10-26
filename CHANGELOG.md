@@ -1,5 +1,9 @@
 # Change Log
 
+## [2.1.1] - 2024-10-25
+
+- fix issue [#11](https://github.com/wenhoujx/swiper/issues/11), wrong line number display, off by 1 
+
 ## [2.1.0] - 2024-04-19
 
 ### Changed
