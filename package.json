@@ -42,6 +42,11 @@
     "configuration": {
       "title": "Swiper",
       "properties": {
+        "swiper.searchFromCursor": {
+          "type": "boolean",
+          "default": false,
+          "description": "Start searching from the cursor position instead of the beginning of the file"
+        },
         "swiper.selectMatch": {
           "type": "boolean",
           "default": true,
