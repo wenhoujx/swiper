@@ -2,7 +2,7 @@
   "name": "swiper",
   "displayName": "swiper",
   "description": "Emacs style swiper fuzzy search buffer/window",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "publisher": "wenhoujx",
   "author": {
     "name": "Wenshuai Hou",

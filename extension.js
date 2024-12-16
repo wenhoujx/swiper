@@ -156,7 +156,7 @@ function _search(searchStr, pick) {
 		// IMPORTANT: set description forces vscode quickpick to match the description 
 		// instead of the line content itself.
 		// otherwise quickpick filters to nothing. 
-		description: `${doc.lineAt(match.line+1).text}`,
+		description: `${doc.lineAt(match.line).text}`,
 		...match
 	}))
 	if (state.lastValue === searchStr && state.lastSelected) {
